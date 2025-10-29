@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/cors" // <-- THIS LINE WAS ADDED
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 )
 
@@ -20,33 +20,28 @@ func main() {
 
 	r := chi.NewRouter()
 
-	// Use common middlewares (request logging, panic recovery)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	// --- ADD CORS CONFIGURATION HERE ---
 	r.Use(cors.Handler(cors.Options{
-		// Allow requests from your React development server
+
 		AllowedOrigins: []string{
 			"http://localhost:5173",
 			"https://url-shortener-frontend-beige.vercel.app",
 		},
-		// Allow POST and GET methods (and OPTIONS for pre-flight)
+
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
-		// Allow standard headers
+
 		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		// Allow credentials (if you were using cookies/sessions)
+
 		AllowCredentials: true,
-		// MaxAge: cache preflight requests for 300 seconds
+
 		MaxAge: 300,
 	}))
-	// --- END CORS CONFIGURATION ---
 
-	// --- Define Routes ---
 	r.Post("/api/shorten", ShortenURLHandler)
 	r.Get("/{code}", RedirectHandler)
 
-	// Start the server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
