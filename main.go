@@ -27,7 +27,10 @@ func main() {
 	// --- ADD CORS CONFIGURATION HERE ---
 	r.Use(cors.Handler(cors.Options{
 		// Allow requests from your React development server
-		AllowedOrigins: []string{"http://localhost:5173"},
+		AllowedOrigins: []string{
+			"http://localhost:5173",
+			"https://url-shortener-frontend-beige.vercel.app",
+		},
 		// Allow POST and GET methods (and OPTIONS for pre-flight)
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
 		// Allow standard headers
